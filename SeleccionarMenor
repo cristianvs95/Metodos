@@ -1,0 +1,45 @@
+package co.com.choucair.certificacion.proyecto.interactions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class SeleccionarMenor implements Interaction {
+
+    private Target lista;
+
+    public SeleccionarMenor(Target lista) {
+        this.lista = lista;
+    }
+
+    public static SeleccionarMenor valor(Target lista) {
+        return new SeleccionarMenor(lista);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        ArrayList<String> precios = new ArrayList<>();
+        List<WebElementFacade> listObjeto = lista.resolveAllFor(actor);
+
+        for (int i = 0; i < listObjeto.size(); i++) {
+
+            String vuelos = listObjeto.get(i).getAttribute("value").trim();
+            String datosVuelo[]=vuelos.split("\\$");
+            String precioVuelo=datosVuelo[2];
+            precios.add(precioVuelo);
+        }
+
+        int minimo = Integer.parseInt(precios.get(0));
+        for (int i = 0; i < precios.size(); i++) {
+            if(minimo>Integer.parseInt(precios.get(i)))
+            {
+                minimo=Integer.parseInt(precios.get(i));
+                listObjeto.get(i).click();
+            }
+        }
+    }
+}
