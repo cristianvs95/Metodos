@@ -1,0 +1,50 @@
+package co.com.choucair.certification.expedia.interactions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.Tasks;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.List;
+
+public class ViajerosNinos implements Interaction {
+
+    private String numeroDeNinos,xpath;
+    private Target mapeo,listaDesplegable;
+
+    public ViajerosNinos(String ninos,Target mapeo,String xpath,Target listaDesplegable) {
+        this.numeroDeNinos = ninos;
+        this.xpath = xpath;
+        this.mapeo = mapeo;
+        this.listaDesplegable = listaDesplegable;
+    }
+
+    public static ViajerosNinos numeroDeNinos(String ninos,Target mapeo,String xpath,Target listaDesplegable){
+        return Tasks.instrumented(ViajerosNinos.class,ninos,mapeo,xpath,listaDesplegable);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        if(!numeroDeNinos.equals(null)||!numeroDeNinos.equals(0)) {
+            List<WebElementFacade> objetoMapeado = mapeo.resolveAllFor(actor);
+            List<WebElementFacade> objetoDesplegable = listaDesplegable.resolveAllFor(actor);
+
+            int listaNinos= Integer.parseInt(numeroDeNinos);
+
+            for(int i=0;i<listaNinos;i++){
+                objetoMapeado.get(0).click();
+
+                if (BuscarElemento.deLaPagina(xpath).equals(true)){
+                    objetoDesplegable.get(0).click();
+                    break;
+                }
+                break;
+            }
+        }
+
+        else {
+            System.out.println("Error");
+        }
+    }
+}
