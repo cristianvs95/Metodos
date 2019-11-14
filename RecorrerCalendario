@@ -1,0 +1,106 @@
+package co.com.choucair.certificacion.proyecto.interactions;
+
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.By;
+import java.util.List;
+
+public class RecorrerCalendario implements Interaction {
+
+    private Target lista,botonAvanzar;
+    private String opcion, paginaMesAno;
+
+    public RecorrerCalendario(Target lista, Target botonAvanzar, String opcion, String paginaMesAno) {
+        this.lista = lista;
+        this.botonAvanzar = botonAvanzar;
+        this.opcion = opcion;
+        this.paginaMesAno = paginaMesAno;
+    }
+
+    public static RecorrerCalendario desde(Target lista, Target botonAvanzar, String opcion, String paginaMesAno) {
+        return new RecorrerCalendario(lista,botonAvanzar, opcion,paginaMesAno);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        String[] fecha = opcion.split("-");
+        String ano = fecha[0];
+        String mes = fecha[1];
+        String dia = fecha[2];
+
+       // String[] fechaPagina = paginaMesAno.split(" ");
+       // String mesPagina = fechaPagina[0];
+       // String anoPagina = fechaPagina[1];
+
+        switch (mes) {
+            case "01":
+                mes = "Enero";
+                break;
+            case "02":
+                mes = "Febrero";
+                break;
+            case "03":
+                mes = "Marzo";
+                break;
+            case "04":
+                mes = "Abril";
+                break;
+            case "05":
+                mes = "Mayo";
+                break;
+            case "06":
+                mes = "Junio";
+                break;
+            case "07":
+                mes = "Julio";
+                break;
+            case "08":
+                mes = "Agosto";
+                break;
+            case "09":
+                mes = "Septiembre";
+                break;
+            case "10":
+                mes = "Octubre";
+                break;
+            case "11":
+                mes = "Noviembre";
+                break;
+            case "12":
+                mes = "Diciembe";
+                break;
+            default:
+                System.out.println("El mes no existe");
+                break;
+        }
+
+        String mesYano = mes+" "+ano;
+        String pagina = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(paginaMesAno)).getText();
+
+        List<WebElementFacade> clickBotonAvanzarCalendario = botonAvanzar.resolveAllFor(actor);
+
+        while(!mesYano.equals(pagina)){
+            clickBotonAvanzarCalendario.get(0).click();
+            pagina = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(paginaMesAno)).getText();
+        }
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        List<WebElementFacade> listCalendario = lista.resolveAllFor(actor);
+
+        for (int i = 0; i < listCalendario.size(); i++) {
+            if (listCalendario.get(i).getAttribute("datetime").trim().equals(opcion)) {
+                listCalendario.get(i).click();
+                break;
+            }
+        }
+    }
+}
