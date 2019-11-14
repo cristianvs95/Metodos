@@ -1,0 +1,34 @@
+package co.com.choucair.certificacion.proyecto.interactions;
+
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+public class BuscarElemento implements Interaction {
+
+    private String mapeo;
+
+    public BuscarElemento(String mapeo) {
+        this.mapeo = mapeo;
+    }
+
+    /*
+        public static Boolean deLaPagina(String mapeo) {
+            WebElement driver = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(mapeo));
+            return driver != null && driver.isDisplayed();
+        }
+    */
+    public static BuscarElemento enLaPagina(String mapeo) {
+        return new BuscarElemento(mapeo);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        WebElement driver = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(mapeo));
+        if (driver != null && driver.isDisplayed()) {
+            return;
+        }
+    }
+}
