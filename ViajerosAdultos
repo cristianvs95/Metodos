@@ -1,4 +1,4 @@
-package co.com.choucair.certification.expedia.interactions;
+package co.com.choucair.certificacion.proyecto.interactions;
 
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
@@ -8,27 +8,27 @@ import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
 
-public class ViajerosAdultos implements Task {
+public class Contador implements Task {
 
-    private String adultos;
+    private String cantidad;
     private Target mapeo;
 
-    public ViajerosAdultos(String adultos,Target mapeo){
-        this.adultos=adultos;
+    public Contador(String cantidad, Target mapeo){
+        this.cantidad=cantidad;
         this.mapeo=mapeo;
     }
 
-    public static ViajerosAdultos numeroDeAdultos(String adultos,Target mapeo){
-        return Tasks.instrumented(ViajerosAdultos.class,adultos,mapeo);
+    public static Contador dePesonas(String adultos, Target mapeo){
+        return Tasks.instrumented(Contador.class,adultos,mapeo);
     }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
 
-        if(!adultos.equals(null)||!adultos.equals(0)) {
+        if(!cantidad.equals(null)||!cantidad.equals(0)) {
 
             List<WebElementFacade> objetoMapeado = mapeo.resolveAllFor(actor);
-            int listaAdultos= Integer.parseInt(adultos)-1;
+            int listaAdultos= Integer.parseInt(cantidad)-1;
             for(int i=0;i<listaAdultos;i++){
                 objetoMapeado.get(0).click();
                 break;
@@ -39,3 +39,4 @@ public class ViajerosAdultos implements Task {
         }
     }
 }
+
