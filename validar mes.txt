@@ -1,0 +1,88 @@
+import static co.com.choucair.certifications.vivaAir.userinterface.RegisterDatas.*;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.questions.Text;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+public class SelectMonth implements Interaction {
+
+    private Target click_next;
+    private Target day1;
+    private Target day2;
+    private String opcion;
+    private String caracter, dato1, dato2, posmonth, resultmonth, firstword, wordmayus, otherword, wordyear;
+    private Calendar date;
+    private Locale wordLocale;
+
+
+    public SelectMonth(Target click_next, Target day1, Target day2, String opcion, String caracter) {
+        this.click_next = click_next;
+        this.day1 = day1;
+        this.day2 = day2;
+        this.opcion = opcion;
+        this.caracter = caracter;
+
+    }
+
+
+    public static SelectMonth since(Target click_next, Target day1, Target day2, String opcion, String caracter) {
+        return new SelectMonth(click_next, day1, day2, opcion, caracter);
+    }
+
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        String[] separadorOpcion = opcion.split("" + caracter + "");
+        dato1 = Text.of(DATE1).viewedBy(actor).asString();
+        dato2 = Text.of(DATE2).viewedBy(actor).asString();
+
+        posmonth = separadorOpcion[1].toString();
+        date = Calendar.getInstance();
+        date.set(Calendar.MONTH, (Integer.parseInt(posmonth) - 1));
+
+        wordLocale = new Locale("en", "EN");
+        resultmonth = date.getDisplayName(Calendar.MONTH, Calendar.LONG, wordLocale);
+        firstword = resultmonth.substring(0, 1);
+        wordmayus = firstword.toUpperCase();
+        otherword = resultmonth.substring(1, resultmonth.length());
+        resultmonth = wordmayus + otherword;
+
+        wordyear = separadorOpcion[2].toString();
+        resultmonth = resultmonth + " " + wordyear;
+
+        while (true) {
+            if (dato1.equals(resultmonth)) {
+                List<WebElementFacade> elemenday1 = day1.resolveAllFor(actor);
+                for (int i = 0; i < elemenday1.size(); i++) {
+                    if (elemenday1.get(i).getText().trim().equals(separadorOpcion[0])) {
+                        elemenday1.get(i).click();
+                        break;
+                    }
+                }
+                break;
+            }else {
+                if (dato2.equals(resultmonth)) {
+                    List<WebElementFacade> elemenday2 = day2.resolveAllFor(actor);
+                    for (int i = 0; i < elemenday2.size(); i++) {
+                        if (elemenday2.get(i).getText().trim().equals(separadorOpcion[0])) {
+                            elemenday2.get(i).click();
+                            break;
+                        }
+                    }
+                    break;
+                } else {
+                    List<WebElementFacade> clickBoton = click_next.resolveAllFor(actor);
+                    clickBoton.get(0).click();
+                    dato1 = Text.of(DATE1).viewedBy(actor).asString();
+                    dato2 = Text.of(DATE2).viewedBy(actor).asString();
+                }
+            }
+        }
+    }
+}
