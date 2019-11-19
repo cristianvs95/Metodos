@@ -1,0 +1,35 @@
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.List;
+
+public class SelectList implements Interaction {
+
+    private Target list;
+    private String opcion;
+
+
+       public SelectList(Target list, String opcion) {
+        this.list = list;
+        this.opcion = opcion;
+    }
+
+
+    public static SelectList since(Target list, String opcion) {
+        return new SelectList(list,opcion);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        List<WebElementFacade> listObjeto = list.resolveAllFor(actor);
+            for (int i = 0; i < listObjeto.size(); i++) {
+                    if (listObjeto.get(i).getText().trim().equals(opcion)) {
+                        listObjeto.get(i).click();
+                        break;
+                    }
+             }
+        }
+    }
