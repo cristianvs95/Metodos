@@ -1,0 +1,72 @@
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.questions.Text;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import static co.com.choucair.certifications.trivago.userinterface.DatasUserInterface.MONTH;
+
+
+public class MonthCycle implements Interaction {
+
+    private Target lista;
+    private Target elemento;
+    private String opcion;
+    private String caracter, dato,posmonth,resultmonth,firstword,wordmayus,otherword,wordyear;
+    private Calendar date;
+    private Locale wordLocale;
+
+
+    public MonthCycle(Target lista, Target elemento, String opcion, String caracter) {
+        this.lista = lista;
+        this.elemento = elemento;
+        this.opcion = opcion;
+        this.caracter = caracter;
+    }
+
+
+    public static MonthCycle since(Target lista,Target elemento, String opcion, String caracter) {
+        return new MonthCycle(lista, elemento, opcion, caracter);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        String[] separadorOpcion = opcion.split(""+caracter+"");
+        dato = Text.of(MONTH).viewedBy(actor).asString();
+
+        posmonth= separadorOpcion[1].toString();
+        date = Calendar.getInstance();
+        date.set(Calendar.MONTH,(Integer.parseInt(posmonth)-1));
+
+        wordLocale = new Locale("es", "ES");
+        resultmonth = date.getDisplayName(Calendar.MONTH,Calendar.LONG,wordLocale);
+        firstword = resultmonth.substring(0,1);
+        wordmayus = firstword.toUpperCase();
+        otherword = resultmonth.substring(1,resultmonth.length());
+        resultmonth= wordmayus+otherword;
+
+        wordyear= separadorOpcion[0].toString();
+        resultmonth= resultmonth+" "+wordyear;
+       
+
+        while (!dato.equals(resultmonth)) {
+            List<WebElementFacade> clickBoton = lista.resolveAllFor(actor);
+            clickBoton.get(0).click();
+            dato = Text.of(MONTH).viewedBy(actor).asString();
+        }
+
+        List<WebElementFacade> elemenDay = elemento.resolveAllFor(actor);
+        for (int i = 0; i < elemenDay.size(); i++) {
+            if (elemenDay.get(i).getText().trim().equals(separadorOpcion[2])) {
+                elemenDay.get(i).click();
+                break;
+            }
+        }
+
+    }
+}
