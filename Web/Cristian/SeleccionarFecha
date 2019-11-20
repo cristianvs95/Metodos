@@ -88,8 +88,8 @@ public class SeleccionarFecha implements Interaction {
         String paginaMesAnoDerecho = paginaMesDerecho + " " + paginaAnoDerecho;
 
         List<WebElementFacade> clickBotonAvanzarCalendario = botonAvanzar.resolveAllFor(actor);
-
         while (!mesYano.equals(paginaMesAnoIzquierdo) && !mesYano.equals(paginaMesAnoDerecho)) {
+
             clickBotonAvanzarCalendario.get(0).click();
             paginaMesIzquierdo = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(mesIzquierdo)).getText();
             paginaAnoIzquierdo = Serenity.getWebdriverManager().getCurrentDriver().findElement(By.xpath(anoIzquierdo)).getText();
@@ -125,4 +125,3 @@ public class SeleccionarFecha implements Interaction {
         }
     }
 }
-
