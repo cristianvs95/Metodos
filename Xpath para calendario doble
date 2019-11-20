@@ -1,0 +1,10 @@
+public static final String CALENDARIO_MES_IZUQUIERDO_CADENA = "//*/div[contains(@class,'month-active')]/div[contains(@class,'month-title')]//span[contains(@class,'title-month')]";
+public static final String CALENDARIO_ANO_IZUQUIERDO_CADENA = "//*/div[contains(@class,'month-active')]/div[contains(@class,'month-title')]//span[contains(@class,'title-year')]";
+public static final Target CALENDARIO_DIA_IZUQUIERDO= Target.the("Calendario dia izquierdo").located(By.xpath("//*/div[contains(@class,'month-active')]/div[contains(@class,'dates')]//span[contains(@class,'number')]"));
+
+public static final String CALENDARIO_MES_DERECHO_CADENA = "//*/div[contains(@class,'month-active')]/following-sibling::div/div/span[contains(@class,'title-month')]";
+public static final String CALENDARIO_ANO_DERECHO_CADENA = "//*/div[contains(@class,'month-active')]/following-sibling::div/div/span[contains(@class,'title-year')]";
+public static final Target CALENDARIO_DIA_DERECHO= Target.the("Calendario dia derecho").located(By.xpath("//*/div[contains(@class,'month-active')]/following-sibling::div/div[contains(@class,'dates')]/span/span[contains(@class,'number')]"));
+
+
+// usar /following-sibling:: para seleccionar le siguiente hermano inmediato del xpath en el cual se encuentra 
