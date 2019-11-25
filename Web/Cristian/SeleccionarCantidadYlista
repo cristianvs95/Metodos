@@ -1,0 +1,72 @@
+package co.com.choucair.certificacion.proyecto.interactions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.List;
+
+
+public class SeleccionarCantidadYlista implements Interaction {
+
+    private String verificarTarget;
+    private String cantidadDePersonas;
+    private String datoLista0;
+    private String datoLista1;
+    private String listasCadenaOpcion;
+    private Target botonMas;
+    private Target listas;
+    private Target listas2;
+
+    public SeleccionarCantidadYlista(String verificarTarget, String cantidadDePersonas, String datoLista0, String datoLista1, Target botonMas, Target listas, String listasCadenaOpcion, Target listas2) {
+        this.verificarTarget = verificarTarget;
+        this.cantidadDePersonas = cantidadDePersonas;
+        this.datoLista0 = datoLista0;
+        this.datoLista1 = datoLista1;
+        this.botonMas = botonMas;
+        this.listas = listas;
+        this.listasCadenaOpcion = listasCadenaOpcion;
+        this.listas2 = listas2;
+    }
+
+    public static SeleccionarCantidadYlista enContador(String verificarTarget, String cantidadDePersonas, String datoLista0, String datoLista1, Target botonMas, Target listas, String listasCadenaOpcion, Target listas2) {
+        return new SeleccionarCantidadYlista(verificarTarget, cantidadDePersonas, datoLista0, datoLista1, botonMas, listas, listasCadenaOpcion, listas2);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        List<WebElementFacade> botonMasMap = botonMas.resolveAllFor(actor);
+        int cantidad = Integer.parseInt(cantidadDePersonas);
+        int posicionObjetoPersonas = 0;
+
+        for (int i = 0; i < cantidad; i++) {
+            botonMasMap.get(0).click();
+            posicionObjetoPersonas++;
+        }
+
+        for (int i = 1; i <= posicionObjetoPersonas; i++) {
+            BuscarElemento.enLaPagina(listas.of(Integer.toString(i)).getCssOrXPathSelector());
+            actor.attemptsTo(Click.on(listas.of(Integer.toString(i)).getCssOrXPathSelector()));
+            //List<WebElementFacade> listaPersonas = listas.of(Integer.toString(i)).resolveAllFor(actor);
+            //listaPersonas.get(i).click();
+            List<WebElementFacade> listaPersonasOpcion = listas2.of(Integer.toString(i)).resolveAllFor(actor);
+
+            for (int j = 0; j < listaPersonasOpcion.size(); j++) {
+                if (listaPersonasOpcion.get(j).getText().trim().equals(datoLista0)) {
+                    listaPersonasOpcion.get(j).click();
+                }
+            }
+
+            if (i == 2) {
+                for (int j = 0; j < listaPersonasOpcion.size(); j++) {
+                    if (listaPersonasOpcion.get(j).getText().trim().equals(datoLista1)) {
+                        listaPersonasOpcion.get(j).click();
+                    }
+                }
+            }
+        }
+
+    }
+}
