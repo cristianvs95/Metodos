@@ -3,11 +3,9 @@ package co.com.choucair.certificacion.proyecto.interactions;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Interaction;
-import net.serenitybdd.screenplay.actions.Click;
 import net.serenitybdd.screenplay.targets.Target;
 
 import java.util.List;
-
 
 public class SeleccionarCantidadYlista implements Interaction {
 
@@ -48,9 +46,8 @@ public class SeleccionarCantidadYlista implements Interaction {
 
         for (int i = 1; i <= posicionObjetoPersonas; i++) {
             BuscarElemento.enLaPagina(listas.of(Integer.toString(i)).getCssOrXPathSelector());
-            actor.attemptsTo(Click.on(listas.of(Integer.toString(i)).getCssOrXPathSelector()));
-            //List<WebElementFacade> listaPersonas = listas.of(Integer.toString(i)).resolveAllFor(actor);
-            //listaPersonas.get(i).click();
+            WebElementFacade listaPersonas = listas.of(Integer.toString(i)).resolveFor(actor);
+            listaPersonas.click();
             List<WebElementFacade> listaPersonasOpcion = listas2.of(Integer.toString(i)).resolveAllFor(actor);
 
             for (int j = 0; j < listaPersonasOpcion.size(); j++) {
