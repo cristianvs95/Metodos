@@ -1,0 +1,29 @@
+import static co.com.choucair.certifications.vivaAir.userinterface.RegisterDatas.*;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Question;
+import net.serenitybdd.screenplay.questions.Text;
+
+public class TheAnswer implements Question <Boolean> {
+
+    private String word;
+
+    public TheAnswer(String word) {
+        this.word = word;
+    }
+    public static TheAnswer is(String word) {
+        return new TheAnswer(word);
+    }
+
+    @Override
+    public Boolean answeredBy(Actor actor) {
+        boolean result;
+
+        String wordCompare = Text.of(QUESTION).viewedBy(actor).asString();
+        if (word.equals(wordCompare)){
+            result = true;
+        }else {
+            result = false;
+        }
+        return result;
+    }
+}
