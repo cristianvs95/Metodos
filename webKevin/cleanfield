@@ -1,0 +1,19 @@
+public class CleanDate implements Interaction {
+    private Target target;
+    private CleanDate(Target target) { this.target = target; }
+
+
+    public static CleanDate the (Target target) {
+        return new CleanDate(target); }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        WebElementFacade element = target.resolveFor(actor);
+        String date = target.resolveFor(actor).getTextValue();
+
+        for (int i = 0; i < date.length(); i++) {
+            element.sendKeys(Keys.BACK_SPACE);
+        }
+
+    }
+}
