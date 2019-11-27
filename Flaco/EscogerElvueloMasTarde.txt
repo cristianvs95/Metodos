@@ -1,0 +1,52 @@
+package co.com.choucair.certification.latam.interactions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static co.com.choucair.certification.latam.util.Constants.COLON;
+import static co.com.choucair.certification.latam.util.Constants.INDEX;
+
+public class SelectLatestFlight implements Interaction {
+    private Target listTargets;
+
+    private SelectLatestFlight(Target listTargets) {
+        this.listTargets = listTargets;
+    }
+
+    public static SelectLatestFlight of(Target listTargets) {
+        return new SelectLatestFlight(listTargets);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        List<WebElementFacade> latestflight = listTargets.resolveAllFor(actor);
+        ArrayList<String> splitedhours = new ArrayList<>();
+        String[] hoursColon;
+        String hhmm;
+
+        for (WebElementFacade webElementFacade : latestflight) {
+            String h = webElementFacade.getAttribute("datetime");
+            hoursColon = h.split(COLON);
+            hhmm = hoursColon[0] + hoursColon[1];
+            splitedhours.add(hhmm);
+        }
+
+        int greater = Integer.parseInt(splitedhours.get(INDEX));
+        int index = 0;
+
+        for (int i = 0; i < splitedhours.size(); i++) {
+            if (greater < Integer.parseInt(splitedhours.get(i))) {
+                greater = Integer.parseInt(splitedhours.get(i));
+                index = i;
+            }
+        }
+
+        latestflight.get(index).click();
+    }
+}
