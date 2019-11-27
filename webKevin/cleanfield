@@ -17,3 +17,5 @@ public class CleanDate implements Interaction {
 
     }
 }
+
+//No olvidar que en la tarea debemos instanciarlo así "CleanDate.the(mapeo de el field)"
