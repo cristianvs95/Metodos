@@ -1,0 +1,22 @@
+import static co.com.choucair.certification.hoy.util.Constants.*;
+import static net.thucydides.core.webdriver.ThucydidesWebDriverSupport.getDriver;
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+
+import java.util.ArrayList;
+
+
+public class ChangeWindow implements Interaction {
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        ArrayList<String> newTab = new ArrayList<>(getDriver().getWindowHandles());
+        getDriver().switchTo().window(newTab.get(ONE));
+    }
+
+    public static ChangeWindow nextTab() {
+        return new ChangeWindow();
+    }
+    
+}
