@@ -1,0 +1,71 @@
+package co.com.choucair.certification.jetcost.interactions;
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import static co.com.choucair.certification.jetcost.userinterface.JetCostLookForPage.*;
+import static co.com.choucair.certification.jetcost.util.Constants.ONE;
+import static co.com.choucair.certification.jetcost.util.Constants.ZERO;
+
+public class SelectCalendar implements Interaction {
+
+    private Target target;
+    private String dateString;
+
+    private SelectCalendar(Target target, String dateString) {
+        this.target = target;
+        this.dateString = dateString;
+    }
+
+    public static SelectCalendar of(Target target, String dateString) {
+        return new SelectCalendar(target, dateString);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        String[] ddmmyy = dateString.split("/");
+        String day = ddmmyy[0];
+        String month = ddmmyy[1];
+        String year = ddmmyy[2];
+        Calendar calendar;
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, (Integer.parseInt(month) - 1));
+        Locale locale = new Locale("es", "ES");
+        String monthString = calendar.getDisplayName(calendar.MONTH, calendar.LONG, locale);
+        String monthStringCapitalize = (monthString.substring(ZERO, ONE).toUpperCase()) + (monthString.substring(ONE, monthString.length()));
+
+        String monthyear = monthStringCapitalize + " " + year;
+
+        boolean find = true;
+
+        String elementMonthYear;
+
+        while (find) {
+            WebElementFacade elementYear = YEARSTRING.resolveFor(actor);
+            WebElementFacade elementMonth = target.resolveFor(actor);
+
+            elementMonthYear = elementMonth.getTextValue() + " " + elementYear.getTextValue();
+
+            if (elementMonthYear.equals(monthyear)) {
+                List<WebElementFacade> listday = LISTDAY.resolveAllFor(actor);
+
+                for (int i = 0; i < listday.size(); i++) {
+                    if (day.equals(listday.get(i).getTextValue())) {
+                        listday.get(i).click();
+                        break;
+                    }
+                }
+                find = false;
+            } else {
+                NEXTMONTH.resolveFor(actor).click();
+            }
+
+        }
+    }
+}
