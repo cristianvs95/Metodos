@@ -1,0 +1,48 @@
+
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.List;
+
+public class SelectHabitacion implements Interaction {
+
+    private Target listhabitacion;
+    private String datecucumber;
+
+
+    private SelectHabitacion(Target listhabitacion, String datecucumber) {
+        this.listhabitacion = listhabitacion;
+        this.datecucumber = datecucumber;
+    }
+
+    public static SelectHabitacion tipo(Target listhabitacion, String datecucumber) {
+        return new SelectHabitacion(listhabitacion, datecucumber);
+    }
+
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        List<WebElementFacade> listahabitaciones = listhabitacion.resolveAllFor(actor);
+        System.out.print("estae s la lista" + listahabitaciones.size());
+
+        for (int i = 0; i < listahabitaciones.size(); i++) {
+            if (datecucumber.equals(listahabitaciones.get(i).getTextContent())) {
+                listahabitaciones.get(i).click();
+                break;
+            }
+
+
+        }
+
+
+
+    }
+}
+
+
+
+
+
