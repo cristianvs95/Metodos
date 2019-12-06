@@ -1,0 +1,80 @@
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.targets.Target;
+
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import static co.com.choucair.certification.trivago.userinterface.FillTrivagoPage.*;
+
+
+public class SelectCalendar implements Interaction {
+
+    private Target target;
+    private String dateString;
+
+    private SelectCalendar(Target target, String dateString) {
+        this.target = target;
+        this.dateString = dateString;
+    }
+
+    public static SelectCalendar of(Target target, String dateString) {
+        return new SelectCalendar(target, dateString);
+    }
+
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+         String[] ddmmyy = dateString.split("/");
+        String day = ddmmyy[0];
+        String month = ddmmyy[1];
+        String year = ddmmyy[2];
+
+        Calendar calendar;
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.MONTH, (Integer.parseInt(month) - 1));
+        Locale locale = new Locale("es", "ES");
+        String monthString = calendar.getDisplayName(calendar.MONTH, calendar.LONG, locale);
+        //esto aca es para convertir mi cadena de mes a la primera letra en MAYUS ejem: abril to Abril
+        String monthStringCapitalize = (monthString.substring(0, 1).toUpperCase()) + (monthString.substring(1, monthString.length()));
+        String monthyear = monthStringCapitalize + " " + year;
+        
+
+        boolean find = true;
+        
+        String elementMonthYear;
+        
+
+        while (find) {
+        //calendar name es el mapeo del calendario del meses 
+            WebElementFacade elementYear = calendarName.resolveFor(actor);
+            elementMonthYear = elementYear.getTextValue();
+            System.out.print("comáre: [" + monthyear + "*" + elementMonthYear + "]\n");
+
+            if (elementYear.getTextValue().equals(monthyear)) {
+            //LISTOF DAYS ES MAPEO DE CADA UNO DE LOS DIAS
+                List<WebElementFacade> listday = lISTOFDAYS.resolveAllFor(actor);
+                System.out.print("comáre: [" + monthyear + "] " + elementYear.getTextValue() + "]\n");
+
+
+                for (int i = 0; i < listday.size(); i++) {
+                    if (day.equals(listday.get(i).getTextValue())) {
+                        listday.get(i).click();
+                        break;
+                    }
+
+                }
+                find = false;
+            } else {
+            //mapeo
+                ClickNextTMounth.resolveFor(actor).click();
+            }
+
+        }
+
+    }
+}
+
+
