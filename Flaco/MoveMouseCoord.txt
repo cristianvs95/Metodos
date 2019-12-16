@@ -1,0 +1,42 @@
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+
+
+/*
+
+Mueve el mouse hasta las coordenas dadas y despues preciona click
+
+*/
+
+
+import java.awt.*;
+import java.awt.event.InputEvent;
+
+public class ClickMouseCoord implements Interaction {
+
+    private int x;
+    private int y;
+
+    private ClickMouseCoord(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public static ClickMouseCoord coord(int x, int y) {
+        return new ClickMouseCoord(x, y);
+    }
+
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        try {
+            Robot robot = new Robot();
+            robot.mouseMove(x, y);
+            robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+        } catch (AWTException e) {
+            e.printStackTrace();
+        }
+    }
+}
