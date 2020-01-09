@@ -1,0 +1,26 @@
+import net.serenitybdd.core.Serenity;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.Tasks;
+import net.serenitybdd.screenplay.targets.Target;
+import org.openqa.selenium.JavascriptExecutor;
+
+public class HacerClick implements Interaction {
+
+    private Target elemento;
+
+    public HacerClick(Target elemento) {
+        this.elemento = elemento;
+    }
+
+    public static HacerClick enElElemento(Target elemento) {
+        return Tasks.instrumented(HacerClick.class, elemento);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        JavascriptExecutor executor = (JavascriptExecutor) Serenity.getWebdriverManager().getCurrentDriver();
+        executor.executeScript("arguments[0].click()", elemento.resolveFor(actor));
+    }
+
+}
