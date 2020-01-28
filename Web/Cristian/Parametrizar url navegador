@@ -1,0 +1,28 @@
+import co.com.choucair.certificacion.proyecto.userinterface.NavegadorPage;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Interaction;
+import net.serenitybdd.screenplay.Tasks;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import org.openqa.selenium.WebDriver;
+
+public class AbrirNavegador implements Interaction {
+
+    private NavegadorPage url ;
+    private String [] parametros ;
+
+    public AbrirNavegador (NavegadorPage url,String[] parametros){
+        this.url = url;
+        this.parametros = parametros;
+    }
+
+    public static AbrirNavegador conParametros(NavegadorPage url, String[] parametros){
+        return Tasks.instrumented(AbrirNavegador.class,url,parametros);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+        WebDriver  driver= BrowseTheWeb.as(actor).getDriver();
+        url.setDriver(driver);
+        url.open(parametros);
+    }
+}
